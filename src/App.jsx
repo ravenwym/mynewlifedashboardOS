@@ -47,42 +47,11 @@ export default function App() {
   const [noteText, setNoteText] = useState('');
   const [noteQuadrant, setNoteQuadrant] = useState('important_urgent');
 
- // 儲存至 LocalStorage
-  useEffect(() => {
-    localStorage.setItem('lifeos_water', water);
-  }, [water]);
-  useEffect(() => {
-    localStorage.setItem('lifeos_habits', JSON.stringify(habits));
-  }, [habits]);
-  useEffect(() => {
-    localStorage.setItem('lifeos_expenses', JSON.stringify(expenses));
-  }, [expenses]);
-  useEffect(() => {
-    localStorage.setItem('lifeos_notes', JSON.stringify(notes));
-  }, [notes]);
-
-  // ▼ 將這段貼在這裡 ▼
-  const syncToGoogleSheets = async (category, value, note = '') => {
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnxY3vaPvu80mV5rIZVaP0PC1QV91PxW8EXvyaub9qI2a5R0_uAvQ1PE56TzoQEpOF/exec";
-
-    try {
-      const response = await fetch(WEB_APP_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ category, value, note })
-      });
-      console.log("已成功發送至 Google 試算表");
-    } catch (error) {
-      console.error("發送失敗：", error);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      ...
+  // 儲存至 LocalStorage
+  useEffect(() => { localStorage.setItem('lifeos_water', water); }, [water]);
+  useEffect(() => { localStorage.setItem('lifeos_habits', JSON.stringify(habits)); }, [habits]);
+  useEffect(() => { localStorage.setItem('lifeos_expenses', JSON.stringify(expenses)); }, [expenses]);
+  useEffect(() => { localStorage.setItem('lifeos_notes', JSON.stringify(notes)); }, [notes]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
@@ -175,37 +144,11 @@ export default function App() {
                 </div>
               </div>
 
-<div className="grid grid-cols-3 gap-2">
-  <button 
-    onClick={() => {
-      setWater(w => Math.max(0, w - 250));
-      syncToGoogleSheets('water', -250, '減少水分');
-    }} 
-    className="py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-medium transition"
-  >
-    -250 ml
-  </button>
-  
-  <button 
-    onClick={() => {
-      setWater(w => w + 250);
-      syncToGoogleSheets('water', 250, '補充水分');
-    }} 
-    className="py-2 bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 rounded-xl text-xs font-medium transition"
-  >
-    +250 ml
-  </button>
-  
-  <button 
-    onClick={() => {
-      setWater(w => w + 500);
-      syncToGoogleSheets('water', 500, '大杯補充');
-    }} 
-    className="py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-medium transition shadow-lg shadow-cyan-600/20"
-  >
-    +500 ml
-  </button>
-</div>
+              <div className="grid grid-cols-3 gap-2">
+                <button onClick={() => setWater(w => Math.max(0, w - 250))} className="py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-medium transition">-250 ml</button>
+                <button onClick={() => setWater(w => w + 250)} className="py-2 bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 rounded-xl text-xs font-medium transition">+250 ml</button>
+                <button onClick={() => setWater(w => w + 500)} className="py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-medium transition shadow-lg shadow-cyan-600/20">+500 ml</button>
+              </div>
             </div>
 
             {/* 快速摘要 */}
