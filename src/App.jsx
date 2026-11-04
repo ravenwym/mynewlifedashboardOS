@@ -6,6 +6,35 @@ import {
 } from 'lucide-react';
 
 export default function App() {
+// 1. 專門用來跟 Google 試算表對話的同步函數
+  const syncToGoogleSheets = async (category, value, note = '') => {
+    // 這裡換成您剛剛從 Google Apps Screen 複製的最新網址
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyRobk15K8SU8H1u12FMa9Ji1zMoo8Qn1OwDe1LBSEI0lneU6CD47-blcoOelbcads/exec";
+
+    try {
+      const response = await fetch(WEB_APP_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain", // 避免瀏覽器 CORS 擋下
+        },
+        body: JSON.stringify({ category, value, note })
+      });
+      
+      const result = await response.json();
+      console.log("成功寫入 Google 試算表：", result);
+    } catch (error) {
+      console.error("發送到 Google 試算表失敗：", error);
+    }
+  };
+
+  // 2. 這是您處理新增記帳的邏輯（如果您的專案裡還沒有這個函數，可以直接用這段）
+  const handleAddExpense = (categoryName, cost, description) => {
+    // 這裡可以放您原本更新網頁畫面或 LocalStorage 的程式碼（例如把資料存進網頁）
+    console.log("正在新增記帳：", categoryName, cost, description);
+
+    // 呼叫我們剛剛寫好的函數，自動把資料傳送到 Google 試算表！
+    syncToGoogleSheets(categoryName, cost, description);
+  };
   // 1. 本地狀態與 LocalStorage 同步
   const [activeTab, setActiveTab] = useState('dashboard');
   
